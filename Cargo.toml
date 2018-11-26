@@ -1,0 +1,10 @@
+[package]
+name = "add_UMI"
+version = "0.1.0"
+authors = ["aaronmck <aaronatwpi@gmail.com>"]
+
+[dependencies]
+rust-htslib = "*"
+regex = "1"
+clap = "2.32"
+lazy_static = "1.2.0"

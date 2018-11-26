@@ -1,0 +1,91 @@
+extern crate rust_htslib;
+extern crate clap;
+
+use regex::Regex;
+use std::env;
+use std::fs::File;
+use std::io::prelude::*;
+use clap::{Arg, App, SubCommand};
+
+fn main() {
+
+    // load up the matchers
+    let matches = App::new("AddUMI")
+        .version("1.0")
+        .author("Aaron McKenna <aaronatwpi@gmail.com>")
+        .about("Given a BAM file with a UMI specified in the name of the read, move it to the UMI tag within the read")
+        .arg(Arg::with_name("inBAM")
+             .short("i")
+             .long("inBAM")
+             .value_name("FILE")
+             .help("the input bam")
+             .takes_value(true)
+             .required(true))
+        .arg(Arg::with_name("outBAM")
+             .short("o")
+             .long("outBAM")
+             .value_name("FILE")
+             .help("the output bam")
+             .takes_value(true)
+             .required(true))
+        .arg(Arg::with_name("tag")
+             .help("the tag which to extract from the read name, and add as a tag on the bam file")
+             .short("t")
+             .long("tag")
+             .value_name("STRING")
+             .takes_value(true)
+             .required(true))
+        .get_matches();
+
+    // setup the input and output files, plus tag
+    let inputBam = matches.value_of("inBAM").unwrap_or("failed.bam");
+    println!("Value for input bam: {}", inputBam);
+
+    let outputBam = matches.value_of("outBAM").unwrap_or("failed.bam");
+    println!("Value for output bam: {}", outputBam);
+
+    let inputTag = matches.value_of("tag").unwrap_or("SL.umi.read1.0.8");
+    println!("Value for output tag: {}", inputTag);
+
+    // create a regex for the tags within a read name
+    let re = Regex::new(r"\{([a-zA-Z_0-9.]+)\}=\{(\w+)\},\{(.+?)\};").unwrap();
+
+    // setup the input and output BAM reader/writers
+    let oBam = bam::Reader::from_path(outputBam).unwrap();
+    let iBam = bam::Writer::from_path(inputBam).unwrap();
+
+    // pileup over all covered sites
+    for p in bam.iter_chunk() {
+        
+        let mat = re.find("").unwrap();
+    }
+    
+    assert!(re.is_match("2014-01-01"));
+
+    let mut f = File::open(filename).expect("file not found");
+
+    let mut contents = String::new();
+    f.read_to_string(&mut contents)
+        .expect("something went wrong reading the file");
+    
+    println!("Hello, world!");
+
+    record.setAttribute("RX",umis(0).group(1))
+}
+
+fn extract_read_UMI(read_name: &str, id: &str) -> Option<&str> {
+    lazy_static! {
+        static ref RE: Regex::new(r"\{(?P<key>[a-zA-Z_0-9.]+)\}=\{(?P<value>\w+)\},\{(.+?)\};").unwrap();
+    }
+    for name in RE.capture_names() {
+        if let Some(name) = name {
+            if let Some(value) = captures.name(name) {
+                hash.insert(name, value);
+            }
+        } 
+    }
+
+    RE.captures(input).and_then(|cap| {
+        cap.name("login").map(|login| login.as_str())
+    })
+}
